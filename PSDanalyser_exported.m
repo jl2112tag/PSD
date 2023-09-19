@@ -374,16 +374,35 @@ classdef PSDanalyser_exported < matlab.apps.AppBase
                 timeLine = floor(timeLine*100)/100;
                 hPosition = stats.Centroid(:,2);
                 pixelArea = pi.*stats.MajorAxisLength.*stats.MinorAxisLength./4;
+                pixelAreaCum = cumsum(pixelArea);
                 width = PDdata.width;
                 
-                if isequal(option,"Spatial")
-                    ylabel(ax1,'Horizontal Location (pixel)');
-                    scatter(ax1,timeLine,hPosition,pixelArea);
-                    ax1.YLim = [1,width];
-                else
-                    ylabel(ax1,'Particle Size (pixel)');
-                    scatter(ax1,timeLine,pixelArea);
-                    ax1.YLim = [1,500];
+                % if isequal(option,"Spatial")
+                %     ylabel(ax1,'Horizontal Location (pixel)');
+                %     scatter(ax1,timeLine,hPosition,pixelArea);
+                %     ax1.YLim = [1,width];
+                % else                    
+                %     ylabel(ax1,'Particle Size (pixel)');
+                %     scatter(ax1,timeLine,pixelArea);
+                %     ax1.YLim = [1,500];
+                % end
+
+                switch option
+                    case "Spatial"
+                        ylabel(ax1,'Horizontal Location (pixel count)');
+                        scatter(ax1,timeLine,hPosition,pixelArea);
+                        ax1.YLim = [1,width];
+                        ax1.XLim = [0 inf];
+                    case "Temporal"
+                        ylabel(ax1,'Particle Size (pixel count)');
+                        scatter(ax1,timeLine,pixelArea);
+                        ax1.YLim = [1,500];
+                        ax1.XLim = [0 inf];
+                    case "Cumulative"
+                        ylabel(ax1,'Cumulative Particle Size (pixel count)');
+                        plot(ax1,timeLine,pixelAreaCum);
+                        ax1.YLim = [1 inf];
+                        ax1.XLim = [0 inf];
                 end
                 
                 binEdgeVec = (0:10:300);
@@ -1625,7 +1644,6 @@ classdef PSDanalyser_exported < matlab.apps.AppBase
 
             % Create UIAxes_PD
             app.UIAxes_PD = uiaxes(app.ParticleDistributionTab);
-            title(app.UIAxes_PD, 'Particle Distribution')
             xlabel(app.UIAxes_PD, 'Time (s)')
             ylabel(app.UIAxes_PD, 'Particle Size (pixel)')
             zlabel(app.UIAxes_PD, 'Z')
@@ -1715,7 +1733,7 @@ classdef PSDanalyser_exported < matlab.apps.AppBase
 
             % Create DataDropDown
             app.DataDropDown = uidropdown(app.ParticleDistributionTab);
-            app.DataDropDown.Items = {'Spatial', 'Temporal'};
+            app.DataDropDown.Items = {'Spatial', 'Temporal', 'Cumulative'};
             app.DataDropDown.Position = [335 139 100 22];
             app.DataDropDown.Value = 'Spatial';
 
