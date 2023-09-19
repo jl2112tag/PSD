@@ -88,6 +88,7 @@ classdef PSDanalyser_exported < matlab.apps.AppBase
         UITable_EL                      matlab.ui.control.Table
         UIAxes_EL                       matlab.ui.control.UIAxes
         ParticleDistributionTab         matlab.ui.container.Tab
+        GridCheckBox                    matlab.ui.control.CheckBox
         DataDropDown                    matlab.ui.control.DropDown
         DataDropDownLabel               matlab.ui.control.Label
         AnimationButton                 matlab.ui.control.Button
@@ -427,6 +428,12 @@ classdef PSDanalyser_exported < matlab.apps.AppBase
             else
                 legend(ax1,"off")
                 legend(ax2,"off")
+            end
+
+            if app.GridCheckBox.Value
+                grid(ax1,"on")
+            else
+                grid(ax1,"off")
             end
             
             hold(ax1,"off")
@@ -1736,6 +1743,11 @@ classdef PSDanalyser_exported < matlab.apps.AppBase
             app.DataDropDown.Items = {'Spatial', 'Temporal', 'Cumulative'};
             app.DataDropDown.Position = [335 139 100 22];
             app.DataDropDown.Value = 'Spatial';
+
+            % Create GridCheckBox
+            app.GridCheckBox = uicheckbox(app.ParticleDistributionTab);
+            app.GridCheckBox.Text = 'Grid';
+            app.GridCheckBox.Position = [364 167 45 22];
 
             % Create Load1stTiffButton
             app.Load1stTiffButton = uibutton(app.PSDanalyserUIFigure, 'push');
