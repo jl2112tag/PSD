@@ -390,7 +390,7 @@ classdef PSDanalyser_exported < matlab.apps.AppBase
 
                 switch option
                     case "Spatial"
-                        ylabel(ax1,'Horizontal Location (pixel count)');
+                        ylabel(ax1,'Horizontal Location (pixel)');
                         scatter(ax1,timeLine,hPosition,pixelArea);
                         ax1.YLim = [1,width];
                         ax1.XLim = [0 inf];
